@@ -2,6 +2,13 @@
 
 ### vNEXT
 
+### 1.1.8
+- dependency updates
+- Fix IntrospectionResultData type definition [#2959](https://github.com/apollographql/apollo-client/issues/2959)
+
+### 1.1.7
+- update to latest apollo-utilities to support directives in cache
+
 ### 1.1.6 (unpublished)
 - update to latest apollo-utilities
 
