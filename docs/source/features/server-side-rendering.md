@@ -1,5 +1,5 @@
 ---
-title: Server Side Rendering
+title: Server-side rendering
 ---
 
 
@@ -34,7 +34,7 @@ We'll see below how you can generate both the HTML and the Apollo store's state 
 
 Then, when the client runs the first set of queries, the data will be returned instantly because it is already in the store!
 
-If you are using [`forceFetch`](cache-updates.html#forceFetch) on some of the initial queries, you can pass the `ssrForceFetchDelay` option to skip force fetching during initialization, so that even those queries run using the cache:
+If you are using `forceFetch` on some of the initial queries, you can pass the `ssrForceFetchDelay` option to skip force fetching during initialization, so that even those queries run using the cache:
 
 ```js
 const client = new ApolloClient({
@@ -60,7 +60,7 @@ We'll see how to take your component tree and turn it into a string in the next 
 
 2. Since you only want to fetch each query result once, pass the `ssrMode: true` option to the Apollo Client constructor to avoid repeated force-fetching.
 
-3. You need to ensure that you create a new client or store instance for each request, rather than re-using the same client for multiple requests. Otherwise the UI will be getting stale data and you'll have problems with [authentication](auth.html).
+3. You need to ensure that you create a new client or store instance for each request, rather than re-using the same client for multiple requests. Otherwise the UI will be getting stale data and you'll have problems with [authentication](../recipes/authentication.html).
 
 Once you put that all together, you'll end up with initialization code that looks like this:
 
@@ -173,7 +173,7 @@ export default routes;
 
 ```
 
-You can check out the [GitHunt app's `ui/server.js`](https://github.com/apollographql/GitHunt-React/blob/master/ui/server.js) for a complete working example.
+You can check out the [GitHunt app's `src/server.js`](https://github.com/apollographql/GitHunt-React/blob/master/src/server.js) for a complete working example.
 
 Next we'll see what that rendering code actually does.
 
@@ -209,7 +209,7 @@ function Html({ content, state }) {
   return (
     <html>
       <body>
-        <div id="content" dangerouslySetInnerHTML={{ __html: content }} />
+        <div id="root" dangerouslySetInnerHTML={{ __html: content }} />
         <script dangerouslySetInnerHTML={{
           __html: `window.__APOLLO_STATE__=${JSON.stringify(state).replace(/</g, '\\u003c')};`,
         }} />
@@ -244,9 +244,12 @@ const client = new ApolloClient({
 If you want to intentionally skip a query during SSR, you can pass `ssr: false` in the query options. Typically, this will mean the component will get rendered in its loading state on the server. For example:
 
 ```js
-const withClientOnlyUser = graphql(GET_USER_WITH_ID, {
-  options: { ssr: false }, // won't be called during SSR
-});
+const withClientOnlyUser = () => (
+  <Query query={GET_USER_WITH_ID} ssr={false}>
+    {({ data }) => <span>I won't be run on the server</span>}
+  </Query>
+);
+
 ```
 
 <h3 id="renderToStringWithData">Using `renderToStringWithData`</h3>
