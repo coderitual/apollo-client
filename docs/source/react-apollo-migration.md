@@ -5,7 +5,7 @@ description: A guide to what's new in React Apollo 2.1
 
 React Apollo was designed from the beginning to make using Apollo with React the easiest possible experience. For a long time, this meant using higher order components to configure and connect Apollo to your React application. With React Apollo 2.1, using the two together is easier and more natural than ever thanks to the brand new Apollo Components! 🚀
 
-**Important**: The 2.1 version only introduces new features, it doesn't remove or break any existing usage of the `graphql` higher order component. You should be able to start using the new features as they make sense without worrying about a full rewrite of your app!
+**Important**: The 2.1 version only introduces new features, it doesn't remove, break, or deprecate any existing usage of the `graphql` higher order component. You should be able to start using the new features as they make sense without worrying about a full rewrite of your app!
 
 <h2 id="query-component">The Query Component</h2>
 
@@ -165,7 +165,7 @@ For more information on how to use the new Query component, read the [full guide
 
 <h2 id="components">The Mutation and Subscription Components</h2>
 
-Much like the Query component, the Mutation and Subscription component are ways to use Apollo directly within your react tree. They simplify integrating with Apollo, and keep your React app written in React! For more information on the Mutation component, [check out the usage guide](./essentials/mutations.html) or if you are wanting to learn about the Subscription component, [read how to here](./advanced/subscriptions.html).
+Much like the Query component, the Mutation and Subscription component are ways to use Apollo directly within your React tree. They simplify integrating with Apollo, and keep your React app written in React! For more information on the Mutation component, [check out the usage guide](./essentials/mutations.html) or if you are wanting to learn about the Subscription component, [read how to here](./advanced/subscriptions.html).
 
 <h2 id="context">ApolloConsumer</h2>
 With upcoming versions of React (starting in React 16.3), there is a new version of context that makes it easier than ever to use components connected to state higher in the tree. While the 2.1 doesn't require React 16.3, we are making it easier than ever to start writing in this style with the `<ApolloConsumer>` component. This is just like the `withApollo` higher order component, just in a normal React component! It takes no props and expects a child function which receives the instance of Apollo Client in your tree. For example:

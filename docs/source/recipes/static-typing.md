@@ -16,9 +16,20 @@ The most common need when using type systems with GraphQL is to type the results
 Using Apollo together with TypeScript couldn't be easier than using it with component API released in React Apollo 2.1:
 
 ```js
+const ALL_PEOPLE_QUERY = gql`
+  query All_People_Query {
+    allPeople {
+      people {
+        id
+        name
+      }
+    }
+  }
+`;
+
 interface Data {
   allPeople: {
-    people: Array<{ name: string }>;
+    people: Array<{ id: string; name: string }>;
   };
 };
 
@@ -26,13 +37,16 @@ interface Variables {
   first: number;
 };
 
-class AllPeopleQuery extends Query<Data, Variables> {}
+const AllPeopleComponent = <Query<Data, Variables> query={ALL_PEOPLE_QUERY}>
+  {({ loading, error, data }) => { ... }}
+</Query>
 ```
 
-Now we can use `AllPeopleQuery` in place of `Query` in our tree to get full TypeScript support! Since we are not mapping any props coming into our component, nor are we rewriting the props passed down, we only need to provide the shape of our data and the variables requried for it to work! Everything else is handled by React Apollo's robust type definitions.
+Now the `<Query />` component render prop function arguments are typed. Since we are not mapping any props coming into our component, nor are we rewriting the props passed down, we only need to provide the shape of our data and the variables for full typing to work! Everything else is handled by React Apollo's robust type definitions.
 
 This approach is the exact same for the `<Query />`, `<Mutation />`, and `<Subcription />` components! Learn it once, and get the best types ever with Apollo.
 
+> Note: It is also possible to extend a `class` with the `<Query />` component as follows: `class AllPeopleQuery extends Query<Data, Variables> {}`. This `class` can be exported and used in a component tree with full TypeScript support
 
 <h2 id="operation-result">Typing the Higher Order Components</h2>
 
@@ -41,7 +55,7 @@ Since the result of a query will be sent to the wrapped component as props, we w
 ```javascript
 import React from "react";
 import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import { ChildDataProps, graphql } from "react-apollo";
 
 const HERO_QUERY = gql`
   query GetCharacter($episode: Episode!) {
@@ -72,11 +86,13 @@ type Variables = {
   episode: string;
 };
 
+type ChildProps = ChildDataProps<{}, Response, Variables>;
+
 // Note that the first parameter here is an empty Object, which means we're
 // not checking incoming props for type safety in this example. The next
 // example (in the "Options" section) shows how the type safety of incoming
 // props can be ensured.
-const withCharacter = graphql<{}, Response, Variables>(HERO_QUERY, {
+const withCharacter = graphql<{}, Response, Variables, ChildProps>(HERO_QUERY, {
   options: () => ({
     variables: { episode: "JEDI" }
   })
@@ -96,7 +112,7 @@ Typically, variables to the query will be computed from the props of the wrapper
 ```javascript
 import React from "react";
 import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import { ChildDataProps, graphql } from "react-apollo";
 
 const HERO_QUERY = gql`
   query GetCharacter($episode: Episode!) {
@@ -131,7 +147,9 @@ type Variables = {
   episode: string;
 };
 
-const withCharacter = graphql<InputProps, Response, Variables>(HERO_QUERY, {
+type ChildProps = ChildDataProps<InputProps, Response, Variables>;
+
+const withCharacter = graphql<InputProps, Response, Variables, ChildProps>(HERO_QUERY, {
   options: ({ episode }) => ({
     variables: { episode }
   }),
@@ -144,7 +162,7 @@ export default withCharacter(({ data: { loading, hero, error } }) => {
 });
 ```
 
-This is expecially helpful when accessing deeply nested objects that are passed down to the component through props. For example, when adding prop types, a project using TypeScript will begin to surface errors where props being passed are invalid:
+This is especially helpful when accessing deeply nested objects that are passed down to the component through props. For example, when adding prop types, a project using TypeScript will begin to surface errors where props being passed are invalid:
 
 ```javascript
 import React from "react";

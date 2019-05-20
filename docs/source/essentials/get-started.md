@@ -12,18 +12,18 @@ If you're an advanced user who would like to configure Apollo Client from scratc
 First, let's install some packages!
 
 ```bash
-npm install apollo-boost react-apollo graphql --save
+npm install apollo-boost react-apollo graphql
 ```
 
 - `apollo-boost`: Package containing everything you need to set up Apollo Client
 - `react-apollo`: View layer integration for React
 - `graphql`: Also parses your GraphQL queries
 
-> If you'd like to walk through this tutorial yourself, we recommend either running a new React project locally with [`create-react-app`](https://reactjs.org/docs/create-a-new-react-app.html) or creating a new React sandbox on [CodeSandbox](https://codesandbox.io/). For reference, we will be using [this Launchpad](https://launchpad.graphql.com/w5xlvm3vzz) as our GraphQL server for our sample app, which pulls exchange rate data from the Coinbase API. If you'd like to skip ahead and see the app we're about to build, you can view it on [CodeSandbox](https://codesandbox.io/s/nn9y2wzyw4).
+> If you'd like to walk through this tutorial yourself, we recommend either running a new React project locally with [`create-react-app`](https://reactjs.org/docs/create-a-new-react-app.html) or creating a new React sandbox on [CodeSandbox](https://codesandbox.io/). For reference, we will be using [this CodeSandbox](https://codesandbox.io/s/48p1r2roz4) as our GraphQL server for our sample app, which pulls exchange rate data from the Coinbase API. If you'd like to skip ahead and see the app we're about to build, you can view it on [CodeSandbox](https://codesandbox.io/s/nn9y2wzyw4).
 
 <h2 id="creating-client">Create a client</h2>
 
-Great, now that you have all the dependencies you need, let's create your Apollo Client. The only thing you need to get started is the endpoint for your [GraphQL server](https://launchpad.graphql.com/w5xlvm3vzz). If you don't pass in `uri` directly, it defaults to the `/graphql` endpoint on the same host your app is served from.
+Great, now that you have all the dependencies you need, let's create your Apollo Client. The only thing you need to get started is the endpoint for your [GraphQL server](https://codesandbox.io/s/48p1r2roz4). If you don't pass in `uri` directly, it defaults to the `/graphql` endpoint on the same host your app is served from.
 
 In our `index.js` file, let's import `ApolloClient` from `apollo-boost` and add the endpoint for our GraphQL server to the `uri` property of the client config object.
 
@@ -31,14 +31,15 @@ In our `index.js` file, let's import `ApolloClient` from `apollo-boost` and add 
 import ApolloClient from "apollo-boost";
 
 const client = new ApolloClient({
-  uri: "https://w5xlvm3vzz.lp.gql.zone/graphql"
+  uri: "https://48p1r2roz4.sse.codesandbox.io"
 });
 ```
 
 That's it! Now your client is ready to start fetching data. Before we hook up Apollo Client to React, let's try sending a query with plain JavaScript first. In the same `index.js` file, try calling `client.query()`. Remember to first import the `gql` function for parsing your query string into a query document.
 
 ```js
-import gql from "graphql-tag";
+import { gql } from "apollo-boost";
+// or you can use `import gql from 'graphql-tag';` instead
 
 ...
 
@@ -90,7 +91,7 @@ Let's create an `ExchangeRates` component in `index.js` to see the `Query` compo
 
 ```jsx
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
+import { gql } from "apollo-boost";
 
 const ExchangeRates = () => (
   <Query
@@ -109,7 +110,7 @@ const ExchangeRates = () => (
 
       return data.rates.map(({ currency, rate }) => (
         <div key={currency}>
-          <p>{`${currency}: ${rate}`}</p>
+          <p>{currency}: {rate}</p>
         </div>
       ));
     }}
@@ -164,7 +165,7 @@ Here are the options you can pass to the `ApolloClient` exported from `apollo-bo
   <dt>`headers`: Object</dt>
   <dd>Header key/value pairs to pass along with the request.</dd>
   <dt>`fetch`: GlobalFetch['fetch']</dt>
-  <dd>A [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) compatible API for making a request.</dd>  
+  <dd>A [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) compatible API for making a request.</dd>
   <dt>`cache`: ApolloCache</dt>
   <dd>A custom instance of `ApolloCache` to be used. The default value is `InMemoryCache` from `apollo-cache-inmemory`. This option is quite useful for using a custom cache with `apollo-cache-persist`.</dd>
 </dl>

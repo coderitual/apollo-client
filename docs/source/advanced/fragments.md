@@ -19,6 +19,8 @@ query GetPerson {
 }
 ```
 
+It's important to note that the component after the `on` clause is designated for the type we are selecting from. In this case, `people` is of type `Person` and we want to select the `firstName` and `lastName` fields from `people(id: "7")`.
+
 There are two principal uses for fragments in Apollo:
 
   - Sharing fields between multiple queries, mutations or subscriptions.
@@ -201,7 +203,29 @@ To support result validation and accurate fragment matching on unions and interf
 
 We recommend setting up a build step that extracts the necessary information from the schema into a JSON file, where it can be imported from when constructing the fragment matcher. To set it up, follow the three steps below:
 
-1. Query your server / schema to obtain the necessary information about unions and interfaces and write it to a file. You can set this up as a script to run at build time.
+1. Query your server / schema to obtain the necessary information about unions and interfaces and write it to a file.
+
+You can automate this or set this as a script to run at build time.
+
+If you want to auto-generate the introspection result, there's a tool called [GraphQL Code Generator](https://graphql-code-generator.com) that does it. Define where your GraphQL Schema is available and where to write the file:
+
+```yaml
+# codegen.yml
+schema: YOUR_API
+overwrite: true
+generates:
+  ./fragmentTypes.json:
+    plugins:
+      - fragment-matcher
+```
+
+With all of that, you simply run:
+
+    gql-gen
+
+> To learn more, you can read the ["Fragment Matcher" chapter](https://graphql-code-generator.com/docs/plugins/fragment-matcher).
+
+In order to introspect the server manually, set this as a script to run at build time.
 
 ```js
 const fetch = require('node-fetch');
@@ -212,7 +236,6 @@ fetch(`${YOUR_API_HOST}/graphql`, {
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     variables: {},
-    operationName: '',
     query: `
       {
         __schema {

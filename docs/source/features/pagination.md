@@ -10,7 +10,7 @@ In this article, we'll cover the technical details of using Apollo to implement 
 
 <h2 id="fetch-more">Using `fetchMore`</h2>
 
-In Apollo, the easiest way to do pagination is with a function called [`fetchMore`](../advanced/caching.html#fetchMore), which is provided on the `data` prop by the `graphql` higher order component. This basically allows you to do a new GraphQL query and merge the result into the original result.
+In Apollo, the easiest way to do pagination is with a function called [`fetchMore`](../advanced/caching.html#fetchMore), which is included in the properties provided by the `Query` component. This basically allows you to do a new GraphQL query and merge the result into the original result.
 
 You can specify what query and variables to use for the new query, and how to merge the new query result with the existing data on the client. How exactly you do that will determine what kind of pagination you are implementing.
 
@@ -117,7 +117,8 @@ const CommentsWithData = () => (
                 entry: {
                   // Put the new comments in the front of the list
                   comments: [...newComments, ...previousEntry.comments]
-                }
+                },
+                __typename: previousEntry.__typename
               };
             }
           })
@@ -194,7 +195,8 @@ const CommentsWithData = () => (
 
 <h2 id="connection-directive">The `@connection` directive</h2>
 When using paginated queries, results from accumulated queries can be hard to find in the store, as the parameters passed to the query are used to determine the default store key but are usually not known outside the piece of code that executes the query. This is problematic for imperative store updates, as there is no stable store key for updates to target. To direct Apollo Client to use a stable store key for paginated queries, you can use the optional `@connection` directive to specify a store key for parts of your queries. For example, if we wanted to have a stable store key for the feed query earlier, we could adjust our query to use the `@connection` directive:
-```
+
+```js
 const FEED_QUERY = gql`
   query Feed($type: FeedType!, $offset: Int, $limit: Int) {
     currentUser {

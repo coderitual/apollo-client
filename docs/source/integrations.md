@@ -8,7 +8,7 @@ description: How to use Apollo Client with the view layer your application is de
 
 React Apollo allows you to fetch data from your GraphQL server and use it in building complex and reactive UIs using the React framework. React Apollo may be used in any context that React may be used. In the browser, in React Native, or in Node.js when you want to server side render.
 
-React Apollo, unlike some other tools in the React ecosystem requires _no_ complex build setup to get up and running. As long as you have a GraphQL server you can get started building out your application with React immediately. React Apollo works out of the box with both [`create-react-app`](https://github.com/facebookincubator/create-react-app) and [React Native](http://facebook.github.io/react-native
+React Apollo, unlike some other tools in the React ecosystem, requires _no_ complex build setup to get up and running. As long as you have a GraphQL server you can get started building out your application with React immediately. React Apollo works out of the box with both [`create-react-app`](https://github.com/facebookincubator/create-react-app) and [React Native](http://facebook.github.io/react-native
 ) with a single install and with no extra hassle configuring Babel or other JavaScript tools.
 
 <h2 id="vue" title="Vue">Vue</h2>
@@ -28,5 +28,8 @@ There are two [Ember](http://emberjs.com/) integrations available:
 
 <h2 id="web-components" title="Web Components">Web Components</h2>
 
-- **Polymer:** A [Polymer](https://www.polymer-project.org/) integration is maintained by Arun Kumar T K ([@aruntk](https://github.com/aruntk)). See the Github [repository](https://github.com/aruntk/polymer-apollo) for more details.
-- **lit-apollo:** A set of custom-element base classes that extend from LitElement which let you easily compose front-end apps in a framework-agnostic way. [`lit-apollo`](https://github.com/bennypowers/lit-apollo) is maintained by Benny Powers ([@bennypowers](https://github.com/bennypowers)).
+Web components are the browser-built-in component APIs. They are defined in a framework-agnostic way, using either vanilla JS or libraries like [`lit-element`](https://lit-element.polymer-project.org) or [`hybrids`](https://hybrids.js.org).
+
+- [apollo-elements](https://github.com/apollo-elements/apollo-elements) includes support for `lit-element`, `gluon`, `hybrids`, and `polymer`, as well as providing class mixin functions so you can integrate Apollo into vanilla elements or any other web component library. Apollo Elements is maintained by Benny Powers ([@bennypowers](https://github.com/bennypowers)).
+
+- [polymer-apollo](https://github.com/aruntk/polymer-apollo) is a separate [Polymer](https://www.polymer-project.org/) integration maintained by Arun Kumar T K ([@aruntk](https://github.com/aruntk)).
